@@ -1,0 +1,31 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 -c \":*)",
+      "Bash(/usr/bin/python3 -c \"import sys; print\\(sys.executable, sys.version\\)\")",
+      "Read(//Users/felix/Library/**)",
+      "Read(//usr/local/**)",
+      "Bash(/dev/null -name python3* -type f)",
+      "Bash(curl -s --max-time 10 \"https://opendata.arcgis.com/datasets/93e7a4ff3ab74d5dbcef12f3a5a70a91_2.geojson\")",
+      "Bash(curl -sL --max-time 15 \"https://hub.arcgis.com/api/download/v1/items/93e7a4ff3ab74d5dbcef12f3a5a70a91/geojson?redirect=true&layers=2\")",
+      "Bash(curl -sL --max-time 15 \"https://data.seattle.gov/api/geospatial/gu55-fqpe?method=export&type=GeoJSON\")",
+      "Bash(1 curl:*)",
+      "Bash(curl -sL --max-time 15 \"https://data.seattle.gov/api/geospatial/gu55-fqpe?method=export&type=GeoJSON&outputSpatialReference=4326\")",
+      "Bash(curl -sL --max-time 15 \"https://gisdata.seattle.gov/server/rest/services/SPD/SPD_Precincts/MapServer/0/query?outFields=*&where=1%3D1&f=geojson\")",
+      "Bash(curl -sL --max-time 20 \"https://opendata.arcgis.com/api/v3/datasets/93e7a4ff3ab74d5dbcef12f3a5a70a91_2/downloads/data?format=geojson&spatialRefId=4326\")",
+      "Bash(curl -sL --max-time 20 \"https://raw.githubusercontent.com/seattleio/seattle-boundaries-data/master/data/police-beats.geojson\")",
+      "Bash(curl -sL --max-time 20 \"https://data.seattle.gov/resource/nnxn-434b.geojson?$limit=10\")",
+      "WebSearch",
+      "WebFetch(domain:data.seattle.gov)",
+      "WebFetch(domain:opendata.arcgis.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:hub.arcgis.com)",
+      "WebFetch(domain:data-seattlecitygis.opendata.arcgis.com)",
+      "WebFetch(domain:seattle-city-maps-seattlecitygis.hub.arcgis.com)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:boundaries-api.seattle.io)",
+      "WebFetch(domain:www.arcgis.com)",
+      "WebFetch(domain:www.seattle.gov)"
+    ]
+  }
+}
