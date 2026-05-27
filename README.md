@@ -146,7 +146,7 @@ Gruppierte Tabelle nach Kategorie → Subkategorie mit einer Spalte pro ausgewä
 Interaktive Folium-Karte mit Choropleth-Darstellung nach Precinct (GeoJSON via GitHub). Fallback: Neighborhood-Karte mit skalierten Kreisen.
 
 ### Monthly Trend
-![KPI Karten](screenshots/monatilicher_trend.png)
+![KPI Karten](screenshots/monatlicher_trend.png)
 Zeitreihen-Chart mit einer Linie pro Jahr, Datenpunkten mit Werten direkt auf der Linie, automatischem Ausblenden überlappender Labels.
 
 ---
