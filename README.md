@@ -118,6 +118,7 @@ conn.execute("""
 ## 🎨 Dashboard-Komponenten
 
 ### Filter-System
+![KPI Karten](screenshots/filter.png)
 6 interaktive Popover-Filter in einer kompakten dunklen Leiste:
 - **Jahr** – 2008 bis 2026
 - **Offense Category** – VIOLENT CRIME, PROPERTY CRIME, ALL OTHER
@@ -127,6 +128,7 @@ conn.execute("""
 - **Neighborhood** – 70+ Stadtteile
 
 ### KPI-Karten
+![KPI Karten](screenshots/header_kpi.png)
 Drei Kennzahlen direkt unterhalb des Headers:
 
 | Karte | Inhalt |
@@ -136,12 +138,15 @@ Drei Kennzahlen direkt unterhalb des Headers:
 | All Other | Absolute Anzahl sonstiger Delikte |
 
 ### Offense Totals Tabelle
+![KPI Karten](screenshots/offense_totals.png)
 Gruppierte Tabelle nach Kategorie → Subkategorie mit einer Spalte pro ausgewähltem Jahr. Neuestes Jahr wird orange hervorgehoben.
 
 ### Crime Hotspot-Karte
+![KPI Karten](screenshots/map.png)
 Interaktive Folium-Karte mit Choropleth-Darstellung nach Precinct (GeoJSON via GitHub). Fallback: Neighborhood-Karte mit skalierten Kreisen.
 
 ### Monthly Trend
+![KPI Karten](screenshots/monatilicher_trend.png)
 Zeitreihen-Chart mit einer Linie pro Jahr, Datenpunkten mit Werten direkt auf der Linie, automatischem Ausblenden überlappender Labels.
 
 ---
