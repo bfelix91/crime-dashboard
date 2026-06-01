@@ -1,11 +1,11 @@
-# 🚔 Seattle Crime Dashboard
+# Seattle Crime Dashboard
 
 > Open-Source Nachbau des [Seattle Police Department Crime Dashboards](https://www.seattle.gov/police/information-and-data/data/crime-dashboard)  
-> Modul: Datenaufbereitung und Visualisierung | THWS | Felix [Nachname]
+> Modul: Datenaufbereitung und Visualisierung | THWS | Felix Beck
 
 ---
 
-## 📋 Projektbeschreibung
+## Projektbeschreibung
 
 Dieses Projekt ist eine vollständige Open-Source-Nachbildung des öffentlich zugänglichen Crime Dashboards der Stadt Seattle, das ursprünglich mit proprietären Tools (ArcGIS / Tableau) umgesetzt wurde.
 
@@ -13,7 +13,7 @@ Dieses Projekt ist eine vollständige Open-Source-Nachbildung des öffentlich zu
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 | Tool | Version | Zweck |
 |------|---------|-------|
@@ -27,7 +27,7 @@ Dieses Projekt ist eine vollständige Open-Source-Nachbildung des öffentlich zu
 
 ---
 
-## 📊 Datenbasis
+## Datenbasis
 
 **Datensatz:** [SPD Crime Data: 2008–Present](https://data.seattle.gov)  
 **Bereitgestellt von:** Seattle Police Department  
@@ -43,7 +43,7 @@ Dieses Projekt ist eine vollständige Open-Source-Nachbildung des öffentlich zu
 
 ---
 
-## 🗂️ Projektstruktur
+## Projektstruktur
 
 ```
 crime-dashboard/
@@ -59,7 +59,7 @@ crime-dashboard/
 
 ---
 
-## 🚀 Installation & Start
+## Installation & Start
 
 **1. Repository klonen:**
 ```bash
@@ -87,7 +87,7 @@ streamlit run sc_dashboard_neu.py
 
 ---
 
-## 📐 Datenaufbereitung
+## Datenaufbereitung
 
 ### Qualitätsprobleme & Lösungen
 
@@ -115,7 +115,7 @@ conn.execute("""
 
 ---
 
-## 🎨 Dashboard-Komponenten
+## Dashboard-Komponenten
 
 ### Filter-System
 ![KPI Karten](screenshots/filter.png)
@@ -151,7 +151,7 @@ Zeitreihen-Chart mit einer Linie pro Jahr, Datenpunkten mit Werten direkt auf de
 
 ---
 
-## 🔍 Vergleich: Original vs. Nachbau
+## Vergleich: Original vs. Nachbau
 
 | Komponente | Original (Tableau) | Nachbau (Streamlit) |
 |---|---|---|
@@ -166,7 +166,7 @@ Zeitreihen-Chart mit einer Linie pro Jahr, Datenpunkten mit Werten direkt auf de
 
 ---
 
-## ⚠️ Bekannte Einschränkungen
+## Bekannte Einschränkungen
 
 - **REDACTED-Koordinaten:** ~15% der Daten haben keine GPS-Koordinaten (Datenschutz)
 - **Systemwechsel 2019:** RMS → NIBRS kann Brüche in Zeitreihen verursachen
@@ -175,13 +175,13 @@ Zeitreihen-Chart mit einer Linie pro Jahr, Datenpunkten mit Werten direkt auf de
 
 ---
 
-## 📄 Dokumentation
+## Dokumentation
 
 Eine ausführliche Dokumentation aller Schritte (Datenaufbereitung, Architektur, Visualisierungen, kritische Reflexion) ist im [Quarto Handout](handout.qmd) verfügbar.
 
 ---
 
-## 📚 Quellen
+## Quellen
 
 - [Seattle Open Data Portal](https://data.seattle.gov)
 - [SPD Crime Dashboard (Original)](https://www.seattle.gov/police/information-and-data/data/crime-dashboard)
