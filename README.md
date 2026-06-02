@@ -118,8 +118,10 @@ conn.execute("""
 ## Dashboard-Komponenten
 
 ### Filter-System
-![KPI Karten](screenshots/filter.png)
 6 interaktive Popover-Filter in einer kompakten dunklen Leiste:
+&nbsp;
+![KPI Karten](screenshots/filter.png)
+&nbsp;
 - **Jahr** – 2008 bis 2026
 - **Offense Category** – VIOLENT CRIME, PROPERTY CRIME, ALL OTHER
 - **Offense Sub Category** – Granulare Deliktarten
