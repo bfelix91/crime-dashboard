@@ -130,8 +130,9 @@ conn.execute("""
 - **Neighborhood** – 70+ Stadtteile
 
 ### KPI-Karten
-![KPI Karten](screenshots/header_kpi.png)
 Drei Kennzahlen direkt unterhalb des Headers:
+![KPI Karten](screenshots/header_kpi.png)
+&nbsp;
 
 | Karte | Inhalt |
 |-------|--------|
@@ -140,16 +141,19 @@ Drei Kennzahlen direkt unterhalb des Headers:
 | All Other | Absolute Anzahl sonstiger Delikte |
 
 ### Offense Totals Tabelle
-![KPI Karten](screenshots/offense_totals.png)
+
 Gruppierte Tabelle nach Kategorie → Subkategorie mit einer Spalte pro ausgewähltem Jahr. Neuestes Jahr wird orange hervorgehoben.
+![KPI Karten](screenshots/offense_totals.png)
 
 ### Crime Hotspot-Karte
-![KPI Karten](screenshots/map.png)
 Interaktive Folium-Karte mit Choropleth-Darstellung nach Precinct (GeoJSON via GitHub). Fallback: Neighborhood-Karte mit skalierten Kreisen.
+![KPI Karten](screenshots/map.png)
+
 
 ### Monthly Trend
-![KPI Karten](screenshots/monatlicher_trend.png)
 Zeitreihen-Chart mit einer Linie pro Jahr, Datenpunkten mit Werten direkt auf der Linie, automatischem Ausblenden überlappender Labels.
+![KPI Karten](screenshots/monatlicher_trend.png)
+
 
 ---
 
