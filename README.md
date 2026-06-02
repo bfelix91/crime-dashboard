@@ -11,6 +11,9 @@ Dieses Projekt ist eine vollständige Open-Source-Nachbildung des öffentlich zu
 
 **Ziel:** Die gesamte Pipeline – von der Rohdatenaufbereitung bis zum interaktiven Dashboard – ausschließlich mit freien, quelloffenen Werkzeugen nachbauen.
 
+Das Original-Dashboard basiert auf **Tableau** ([Fallstudie](https://www.tableau.com/solutions/workbook/visualizing-crime-and-increasing-transparency-in-seattle)) 
+und **ArcGIS** ([Dashboard](https://www.arcgis.com/home/item.html?id=241ee9264d4b4d9e8ab902a78e19a48c)).
+
 ---
 
 ## Tech Stack
