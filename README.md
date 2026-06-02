@@ -9,7 +9,7 @@
 
 Dieses Projekt ist eine vollständige Open-Source-Nachbildung des öffentlich zugänglichen Crime Dashboards der Stadt Seattle, das ursprünglich mit proprietären Tools (ArcGIS / Tableau) umgesetzt wurde.
 
-**Ziel:** Die gesamte Pipeline – von der Rohdatenaufbereitung bis zum interaktiven Dashboard – ausschließlich mit freien, quelloffenen Werkzeugen nachbauen.
+**Ziel:** Die gesamte Nachbau – von der Rohdatenaufbereitung bis zum interaktiven Dashboard – ausschließlich mit freien, quelloffenen Werkzeugen nachbauen.
 
 Das Original-Dashboard basiert auf **Tableau** ([Fallstudie](https://www.tableau.com/solutions/workbook/visualizing-crime-and-increasing-transparency-in-seattle)) 
 und **ArcGIS** ([Dashboard](https://www.arcgis.com/home/item.html?id=241ee9264d4b4d9e8ab902a78e19a48c)).
@@ -38,9 +38,9 @@ und **ArcGIS** ([Dashboard](https://www.arcgis.com/home/item.html?id=241ee9264d4
 
 | Merkmal | Wert |
 |---------|------|
-| Zeilen (gesamt) | 1.517.725 |
+| Zeilen (gesamt) | 1.54 M |
 | Zeilen (bereinigt) | 1.296.053 (85%) |
-| Spalten | 19 |
+| Spalten | 20 |
 | Zeitraum | 2008 – 2026 |
 | Dateigröße | ca. 382 MB |
 
