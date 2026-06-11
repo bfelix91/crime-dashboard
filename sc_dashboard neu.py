@@ -360,7 +360,7 @@ where = build_where(jahre_sel, kat_sel, sub_sel, pre_sel, beat_sel, nb_sel)
 # ─────────────────────────────────────────────
 # CHARTS – TABELLE & KARTE
 # ─────────────────────────────────────────────
-col_verteilung, col_karte = st.columns([3, 2])
+col_verteilung, col_karte = st.columns([1, 1])
 
 with col_verteilung:
     _js = sorted(jahre_sel, reverse=True)
@@ -493,8 +493,8 @@ with col_karte:
             columns=["Precinct", "anzahl"],
             key_on="feature.properties.precinct_full",
             fill_color="Blues",
-            fill_opacity=1.0,
-            line_opacity=1.0,
+            fill_opacity=0.6,
+            line_opacity=0.8,
             line_color="#1a3a5c",
             legend_name="Anzahl Delikte",
             nan_fill_color="#f0f0f0",
