@@ -177,7 +177,16 @@ def get_connection():
     if not os.path.exists(DB_PATH):
         with st.spinner("Datenbank wird einmalig heruntergeladen (~250 MB) – das kann einen Moment dauern..."):
             _download_database()
-    return duckdb.connect(DB_PATH, read_only=True)
+    conn = duckdb.connect()
+    conn.execute(f"ATTACH '{DB_PATH}' AS src (READ_ONLY)")
+    conn.execute("""
+        CREATE VIEW crimes_clean AS
+        SELECT * EXCLUDE (offense_category, offense_sub_category),
+               offense_category AS "Offense Category",
+               offense_sub_category AS "Offense Sub Category"
+        FROM src.crimes_clean
+    """)
+    return conn
 
 conn = get_connection()
 
