@@ -160,23 +160,43 @@ st.markdown("""
 # DATENBANKVERBINDUNG
 # ─────────────────────────────────────────────
 DB_PATH = os.path.join(BASE_DIR, "seattle_crime.db")
+META_PATH = DB_PATH + ".meta"
 DB_DOWNLOAD_URL = "https://github.com/bfelix91/crime-dashboard/releases/download/db-v1/seattle_crime.db"
+
+def _remote_last_modified():
+    import requests
+    try:
+        r = requests.head(DB_DOWNLOAD_URL, allow_redirects=True, timeout=15)
+        r.raise_for_status()
+        return r.headers.get("Last-Modified", "")
+    except Exception:
+        return None
 
 def _download_database():
     import requests
     tmp_path = DB_PATH + ".tmp"
     with requests.get(DB_DOWNLOAD_URL, stream=True, timeout=120) as r:
         r.raise_for_status()
+        last_modified = r.headers.get("Last-Modified", "")
         with open(tmp_path, "wb") as f:
             for chunk in r.iter_content(chunk_size=8 * 1024 * 1024):
                 f.write(chunk)
     os.replace(tmp_path, DB_PATH)
+    with open(META_PATH, "w") as f:
+        f.write(last_modified)
 
-@st.cache_resource
+@st.cache_resource(ttl="24h")
 def get_connection():
-    if not os.path.exists(DB_PATH):
-        with st.spinner("Datenbank wird einmalig heruntergeladen (~250 MB) – das kann einen Moment dauern..."):
+    remote_modified = _remote_last_modified()
+    local_modified = None
+    if os.path.exists(META_PATH):
+        with open(META_PATH) as f:
+            local_modified = f.read()
+
+    if not os.path.exists(DB_PATH) or (remote_modified and remote_modified != local_modified):
+        with st.spinner("Datenbank wird aktualisiert (~250 MB) – das kann einen Moment dauern..."):
             _download_database()
+
     conn = duckdb.connect()
     conn.execute(f"ATTACH '{DB_PATH}' AS src (READ_ONLY)")
     conn.execute("""
