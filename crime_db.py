@@ -46,11 +46,16 @@ def clean_and_enrich(df):
 
 
 def load_historical():
-    """Historische Daten 2008-2023 von GitHub laden"""
-    print("Lade historische Daten von GitHub...")
-    response = requests.get(PARQUET_URL, timeout=60)
-    response.raise_for_status()
-    df = pd.read_parquet(BytesIO(response.content))
+    """Historische Daten 2008-2023 laden (lokal falls vorhanden, sonst von GitHub)"""
+    local_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "crimes_historical.parquet")
+    if os.path.exists(local_path):
+        print("Lade historische Daten lokal...")
+        df = pd.read_parquet(local_path)
+    else:
+        print("Lade historische Daten von GitHub...")
+        response = requests.get(PARQUET_URL, timeout=60)
+        response.raise_for_status()
+        df = pd.read_parquet(BytesIO(response.content))
     print(f"  → {len(df):,} Zeilen geladen (2008–2023)")
     return df
 

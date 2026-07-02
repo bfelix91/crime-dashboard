@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import os
 import streamlit as st
 import duckdb
 import plotly.express as px
 import folium
 from streamlit.components.v1 import html as st_html
 from datetime import date
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # ─────────────────────────────────────────────
 # KONFIGURATION
@@ -156,12 +159,16 @@ st.markdown("""
 # ─────────────────────────────────────────────
 # DATENBANKVERBINDUNG
 # ─────────────────────────────────────────────
+DB_PATH = os.path.join(BASE_DIR, "seattle_crime.db")
+
 @st.cache_resource
 def get_connection():
-    return duckdb.connect(
-        "/Users/felix/Documents/Felix/Studium/4. Semester/Projekt Crime Dashboard/seattle_crime.db",
-        read_only=True
-    )
+    if not os.path.exists(DB_PATH):
+        import crime_db
+        crime_db.DB_PATH = DB_PATH
+        with st.spinner("Datenbank wird erstmalig aufgebaut – das kann einen Moment dauern..."):
+            crime_db.build_database()
+    return duckdb.connect(DB_PATH, read_only=True)
 
 conn = get_connection()
 
@@ -169,8 +176,8 @@ conn = get_connection()
 # GEOJSON – Seattle Precincts (gecacht)
 # ─────────────────────────────────────────────
 def load_precinct_geojson():
-    import json as _json, os
-    local = "/Users/felix/Documents/Felix/Studium/4. Semester/Projekt Crime Dashboard/spd-precincts.geojson"
+    import json as _json
+    local = os.path.join(BASE_DIR, "spd-precincts.geojson")
     if os.path.exists(local):
         with open(local, encoding="utf-8") as f:
             return _json.load(f)
