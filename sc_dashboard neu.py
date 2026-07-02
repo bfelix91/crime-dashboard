@@ -181,9 +181,12 @@ def get_connection():
     conn.execute(f"ATTACH '{DB_PATH}' AS src (READ_ONLY)")
     conn.execute("""
         CREATE VIEW crimes_clean AS
-        SELECT * EXCLUDE (offense_category, offense_sub_category),
+        SELECT * EXCLUDE (offense_category, offense_sub_category, precinct, beat, neighborhood),
                offense_category AS "Offense Category",
-               offense_sub_category AS "Offense Sub Category"
+               offense_sub_category AS "Offense Sub Category",
+               precinct AS "Precinct",
+               beat AS "Beat",
+               neighborhood AS "Neighborhood"
         FROM src.crimes_clean
     """)
     return conn
