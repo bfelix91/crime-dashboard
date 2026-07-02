@@ -27,7 +27,7 @@ def clean_and_enrich(df):
     df = df.dropna(subset=["latitude", "longitude"])
 
     # Datum parsen
-    df["offense_date_parsed"] = pd.to_datetime(df["offense_date"], errors="coerce")
+    df["report_dt_parsed"] = pd.to_datetime(df["report_date_time"], errors="coerce")
     df = df[df["offense_date_parsed"].dt.year >= 2008]
 
     # Neue Spalten
