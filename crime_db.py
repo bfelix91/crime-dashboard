@@ -45,6 +45,49 @@ def clean_and_enrich(df):
     return df
 
 
+def load_historical():
+    """Historische Daten 2008-2023 von GitHub laden"""
+    print("Lade historische Daten von GitHub...")
+    response = requests.get(PARQUET_URL, timeout=60)
+    response.raise_for_status()
+    df = pd.read_parquet(BytesIO(response.content))
+    print(f"  → {len(df):,} Zeilen geladen (2008–2023)")
+    return df
+
+
+def load_recent():
+    """Aktuelle Daten 2024–heute von der Socrata API laden"""
+    print("Lade aktuelle Daten von der Seattle API...")
+    all_rows = []
+    offset = 0
+    limit = 50000
+
+    while True:
+        params = {
+            "$limit": limit,
+            "$offset": offset,
+            "$where": "offense_date >= '2024-01-01T00:00:00'",
+            "$order": "offense_date ASC"
+        }
+        response = requests.get(API_URL, params=params, timeout=60)
+        response.raise_for_status()
+        batch = response.json()
+
+        if not batch:
+            break
+
+        all_rows.extend(batch)
+        offset += limit
+        print(f"  → {len(all_rows):,} Zeilen geladen...")
+
+        if len(batch) < limit:
+            break
+
+    df = pd.DataFrame(all_rows)
+    print(f"  → Insgesamt {len(df):,} aktuelle Zeilen (2024–heute)")
+    return df
+
+
 # ─────────────────────────────────────────────
 # HAUPTPROZESS
 # ─────────────────────────────────────────────
