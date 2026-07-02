@@ -1,95 +1,118 @@
-# -*- coding: utf-8 -*-
-"""
-Spyder Editor
-
-This is a temporary script file.
-"""
-#------------------------------------------------------------------------------
-# Vorbereitung
-#------------------------------------------------------------------------------
-
 import duckdb
+import pandas as pd
+import requests
 import os
+from io import BytesIO
 
-# Pfad zum Projektordner
-os.chdir('/Users/felix/Documents/Felix/Studium/4. Semester/Projekt Crime Dashboard')
+# ─────────────────────────────────────────────
+# KONFIGURATION
+# ─────────────────────────────────────────────
+PARQUET_URL = "https://raw.githubusercontent.com/bfelix91/crime-dashboard/main/crimes_historical.parquet"
+API_URL = "https://data.seattle.gov/resource/tazs-3rd5.json"
+DB_PATH = "seattle_crime.db"
 
-# Einlesen der CSV in die DuckDB
-conn = duckdb.connect("seattle_crime.db")
+# ─────────────────────────────────────────────
+# HILFSFUNKTIONEN
+# ─────────────────────────────────────────────
+def clean_and_enrich(df):
+    """Bereinigung und neue Spalten berechnen"""
+    # Alle Spaltennamen zu lowercase
+    df.columns = [c.lower().replace(" ", "_") for c in df.columns]
 
-conn.execute("""
-    CREATE TABLE IF NOT EXISTS crimes AS 
-    SELECT * FROM read_csv_auto('Crime_Data__2008-Present.csv')
-""")
+    # Koordinaten bereinigen
+    for col in ["latitude", "longitude"]:
+        if col in df.columns:
+            df = df[~df[col].isin(["REDACTED", "0", "", None])]
+            df[col] = pd.to_numeric(df[col], errors="coerce")
+    df = df.dropna(subset=["latitude", "longitude"])
 
-# Anzahl Zeilen
-print(conn.execute("SELECT COUNT(*) FROM crimes").fetchone()[0])
+    # Datum parsen
+    df["offense_date_parsed"] = pd.to_datetime(df["offense_date"], errors="coerce")
+    df = df[df["offense_date_parsed"].dt.year >= 2008]
 
-# Spaltennamen anzeigen
-print(conn.execute("DESCRIBE crimes").df())
+    # Neue Spalten
+    df["report_dt_parsed"] = pd.to_datetime(df["report_datetime"], errors="coerce")
+    df["stunde"]    = df["report_dt_parsed"].dt.hour
+    df["wochentag"] = df["report_dt_parsed"].dt.dayofweek
+    df["jahr"]      = df["offense_date_parsed"].dt.year
+    df["monat"]     = df["offense_date_parsed"].dt.month
 
-# Erste 5 Zeilen
-conn.execute("SELECT * FROM crimes LIMIT 5").df()
-
-
-#------------------------------------------------------------------------------
-# Datenaufbereitung
-#------------------------------------------------------------------------------
-
-
-
-# Datentypen und fehlende Werte prüfen
-print(conn.execute("""
-    SELECT 
-        COUNT(*) as gesamt,
-        COUNT(Latitude) as mit_koordinaten,
-        COUNT(Neighborhood) as mit_neighborhood,
-        MIN("Offense Date") as aeltester_eintrag,
-        MAX("Offense Date") as neuester_eintrag
-    FROM crimes
-""").df())
-
-# Top 10 häufigste Delikte
-conn.execute("""
-    SELECT "Offense Category", COUNT(*) as anzahl
-    FROM crimes
-    GROUP BY "Offense Category"
-    ORDER BY anzahl DESC
-    LIMIT 10
-""").df()
+    return df
 
 
-conn.execute("""
-    CREATE TABLE IF NOT EXISTS crimes_clean AS
-    SELECT *,
-        strptime("Offense Date", '%Y %b %d %I:%M:%S %p') AS offense_date_parsed,
-        EXTRACT(hour FROM strptime("Report DateTime", '%Y %b %d %I:%M:%S %p')) AS stunde,
-        DAYOFWEEK(strptime("Report DateTime", '%Y %b %d %I:%M:%S %p')) AS wochentag,
-        YEAR(strptime("Offense Date", '%Y %b %d %I:%M:%S %p')) AS jahr,
-        MONTH(strptime("Offense Date", '%Y %b %d %I:%M:%S %p')) AS monat
-    FROM crimes
-    WHERE 
-        YEAR(strptime("Offense Date", '%Y %b %d %I:%M:%S %p')) >= 2008
-        AND Latitude IS NOT NULL
-        AND Longitude IS NOT NULL
-        AND Latitude != 'REDACTED'
-        AND Longitude != 'REDACTED'
-        AND Latitude != '0'
-        AND Longitude != '0'
-""")
+def load_historical():
+    """Historische Daten 2008-2023 von GitHub laden"""
+    print("Lade historische Daten von GitHub...")
+    response = requests.get(PARQUET_URL, timeout=60)
+    response.raise_for_status()
+    df = pd.read_parquet(BytesIO(response.content))
+    print(f"  → {len(df):,} Zeilen geladen (2008–2023)")
+    return df
 
-print(conn.execute("SELECT COUNT(*) FROM crimes_clean").fetchone()[0])
 
-# Verteilung über die Jahre – gibt es Ausreißer?
-conn.execute("""
-    SELECT jahr, COUNT(*) as anzahl
-    FROM crimes_clean
-    GROUP BY jahr
-    ORDER BY jahr
-""").df()
+def load_recent():
+    """Aktuelle Daten 2024–heute von der Socrata API laden"""
+    print("Lade aktuelle Daten von der Seattle API...")
+    all_rows = []
+    offset = 0
+    limit = 50000
 
-# Wie viele REDACTED wurden entfernt?
-print(conn.execute("""
-    SELECT COUNT(*) FROM crimes 
-    WHERE Latitude = 'REDACTED'
-""").fetchone()[0])
+    while True:
+        params = {
+            "$limit": limit,
+            "$offset": offset,
+            "$where": "offense_date >= '2024-01-01T00:00:00'",
+            "$order": "offense_date ASC"
+        }
+        response = requests.get(API_URL, params=params, timeout=60)
+        response.raise_for_status()
+        batch = response.json()
+
+        if not batch:
+            break
+
+        all_rows.extend(batch)
+        offset += limit
+        print(f"  → {len(all_rows):,} Zeilen geladen...")
+
+        if len(batch) < limit:
+            break
+
+    df = pd.DataFrame(all_rows)
+    print(f"  → Insgesamt {len(df):,} aktuelle Zeilen (2024–heute)")
+    return df
+
+
+# ─────────────────────────────────────────────
+# HAUPTPROZESS
+# ─────────────────────────────────────────────
+def build_database():
+    print("=== Datenbank aufbauen ===")
+
+    # 1. Daten laden
+    df_hist   = load_historical()
+    df_recent = load_recent()
+
+    # 2. Aktuelle Daten bereinigen
+    df_recent = clean_and_enrich(df_recent)
+
+    # Spaltennamen angleichen
+    df_recent.columns = [c.lower().replace(" ", "_") for c in df_recent.columns]
+    df_hist.columns   = [c.lower().replace(" ", "_") for c in df_hist.columns]
+
+    # 3. Zusammenführen
+    df_all = pd.concat([df_hist, df_recent], ignore_index=True)
+    print(f"\nGesamt: {len(df_all):,} Zeilen (2008–heute)")
+
+    # 4. In DuckDB speichern
+    conn = duckdb.connect(DB_PATH)
+    conn.execute("DROP TABLE IF EXISTS crimes_clean")
+    conn.execute("CREATE TABLE crimes_clean AS SELECT * FROM df_all")
+    conn.close()
+
+    print(f"Datenbank gespeichert: {DB_PATH}")
+    print("=== Fertig! ===")
+
+
+if __name__ == "__main__":
+    build_database()
