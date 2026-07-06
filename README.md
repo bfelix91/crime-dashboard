@@ -11,7 +11,7 @@
 
 Dieses Projekt ist eine vollständige Open-Source-Nachbildung des öffentlich zugänglichen Crime Dashboards der Stadt Seattle, das ursprünglich mit proprietären Tools (ArcGIS / Tableau) umgesetzt wurde.
 
-**Ziel:** Die gesamte Nachbau – von der Rohdatenaufbereitung bis zum interaktiven Dashboard – ausschließlich mit freien, quelloffenen Werkzeugen nachbauen.
+**Ziel:** Der gesamte Nachbau – von der Rohdatenaufbereitung bis zum interaktiven Dashboard – ausschließlich mit freien, quelloffenen Werkzeugen nachbauen.
 
 Das Original-Dashboard basiert auf **Tableau** ([Fallstudie](https://www.tableau.com/solutions/workbook/visualizing-crime-and-increasing-transparency-in-seattle)) 
 und **ArcGIS** ([Dashboard](https://www.arcgis.com/home/item.html?id=241ee9264d4b4d9e8ab902a78e19a48c)).
@@ -136,6 +136,17 @@ conn.execute("""
 
 ## Dashboard-Komponenten
 
+### KPI-Karten
+Drei Kennzahlen direkt unterhalb des Headers:
+![KPI Karten](screenshots/header_kpi.png)
+&nbsp;
+
+| Karte | Inhalt |
+|-------|--------|
+| Violent Crime | Absolute Anzahl Gewaltdelikte |
+| Property Crime | Absolute Anzahl Eigentumsdelikte |
+| All Other | Absolute Anzahl sonstiger Delikte |
+
 ### Filter-System
 6 interaktive Popover-Filter in einer kompakten dunklen Leiste:
 &nbsp;
@@ -148,16 +159,7 @@ conn.execute("""
 - **Beat** – Untereinheiten der Precincts
 - **Neighborhood** – 70+ Stadtteile
 
-### KPI-Karten
-Drei Kennzahlen direkt unterhalb des Headers:
-![KPI Karten](screenshots/header_kpi.png)
-&nbsp;
 
-| Karte | Inhalt |
-|-------|--------|
-| Violent Crime | Absolute Anzahl Gewaltdelikte |
-| Property Crime | Absolute Anzahl Eigentumsdelikte |
-| All Other | Absolute Anzahl sonstiger Delikte |
 
 ### Offense Totals Tabelle
 
