@@ -221,22 +221,20 @@ Eine ausführliche Dokumentation aller Schritte (Datenaufbereitung, Architektur,
 
 
 KI-Unterstützung
-Im Rahmen dieses Projekts wurde Claude (Anthropic) als KI-Assistent eingesetzt. Der Einsatz erfolgte für nachfolgende Bereiche:
+Im Rahmen dieses Projekts wurde Claude (Anthropic) als KI-Assistent eingesetzt. 
+Der Einsatz erfolgte für nachfolgende Bereiche:
 
 Code-Unterstützung:
-
-Debugging von Fehlermeldungen (z.B. DuckDB-Verbindungsprobleme, Streamlit Cache-Fehler)
-Vorschläge für CSS-Styling des Dashboards
-Hilfe bei der Folium/Plotly Konfiguration
+- Debugging von Fehlermeldungen (z.B. DuckDB-Verbindungsprobleme, Streamlit Cache-Fehler)
+- Vorschläge für CSS-Styling des Dashboards, 
+- Hilfe bei der Folium/Plotly Konfiguration
 
 Dokumentation:
-
-Unterstützung bei der Erstellung des interaktiven Architektur-Diagramms sowie der README
+- Unterstützung bei der Erstellung des interaktiven Architektur-Diagramms sowie der README
 
 Konzeptionelle Unterstützung:
-
-Diskussion der Datenbankwahl (DuckDB vs. Alternativen)
-Strategieberatung beim Deployment (Hybrid-Ansatz Parquet + API)
+- Diskussion der Datenbankwahl (DuckDB vs. Alternativen)
+- Strategieberatung beim Deployment (Hybrid-Ansatz Parquet + API)
 
 ---
 
