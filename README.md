@@ -3,6 +3,8 @@
 > Open-Source Nachbau des [Seattle Police Department Crime Dashboards](https://www.seattle.gov/police/information-and-data/data/crime-dashboard)  
 > Modul: Datenaufbereitung und Visualisierung | THWS | Felix Beck
 
+🔗 **Live-Demo:** [crime-dashboard-eiyustjjxtgdrhvnruzwsb.streamlit.app](https://crime-dashboard-eiyustjjxtgdrhvnruzwsb.streamlit.app)
+
 ---
 
 ## Projektbeschreibung
@@ -27,6 +29,7 @@ und **ArcGIS** ([Dashboard](https://www.arcgis.com/home/item.html?id=241ee9264d4
 | Plotly | ≥ 5.0 | Zeitreihen & Charts |
 | Folium | ≥ 0.15 | Interaktive Karte |
 | streamlit-folium | ≥ 0.18 | Folium in Streamlit |
+| GitHub Actions | – | Tägliche automatische Aktualisierung der Datenbank |
 
 ---
 
@@ -41,8 +44,10 @@ und **ArcGIS** ([Dashboard](https://www.arcgis.com/home/item.html?id=241ee9264d4
 | Zeilen (gesamt) | 1.54 M |
 | Zeilen (bereinigt) | 1.296.053 (85%) |
 | Spalten | 20 |
-| Zeitraum | 2008 – 2026 |
+| Zeitraum | 2008 – heute |
 | Dateigröße | ca. 382 MB |
+
+> Werte beziehen sich auf den ursprünglichen Aufbau. Durch die tägliche automatische Aktualisierung (siehe [Deployment](#deployment--automatische-aktualisierung)) wächst der Datensatz laufend weiter.
 
 ---
 
@@ -50,15 +55,17 @@ und **ArcGIS** ([Dashboard](https://www.arcgis.com/home/item.html?id=241ee9264d4
 
 ```
 crime-dashboard/
-├── sc_dashboard_neu.py      ← Streamlit App (Hauptdatei)
-├── crime_db.py              ← Datenaufbereitung & DuckDB Import
-├── handout.qmd              ← Quarto Dokumentation
-├── requirements.txt         ← Python Pakete
-├── .gitignore               ← CSV & DB ausgeschlossen
-└── README.md                ← Diese Datei
+├── sc_dashboard neu.py        ← Streamlit App (Hauptdatei)
+├── crime_db.py                ← Datenaufbereitung & DuckDB Import
+├── crimes_historical.parquet  ← Historische Daten 2008–2023 (im Repo)
+├── .github/workflows/
+│   └── update-db.yml          ← Tägliche Automatisierung (GitHub Actions)
+├── requirements.txt           ← Python Pakete
+├── .gitignore                 ← CSV & DB ausgeschlossen
+└── README.md                  ← Diese Datei
 ```
 
-> **Hinweis:** Die Rohdaten (`Crime_Data__2008-Present.csv`) und die Datenbank (`seattle_crime.db`) sind aus Größengründen nicht im Repository enthalten.
+> **Hinweis:** Die fertige Datenbank (`seattle_crime.db`, ca. 250 MB) ist aus Größengründen nicht im Repository enthalten (`.gitignore`). Für den lokalen Betrieb wird sie mit `crime_db.py` selbst aufgebaut; die öffentliche App lädt sie automatisch von einem [GitHub Release](https://github.com/bfelix91/crime-dashboard/releases/tag/db-v1) herunter (siehe [Deployment](#deployment--automatische-aktualisierung)).
 
 ---
 
@@ -66,27 +73,36 @@ crime-dashboard/
 
 **1. Repository klonen:**
 ```bash
-git clone git@github.com:FelixB54/crime-dashboard.git
+git clone git@github.com:bfelix91/crime-dashboard.git
 cd crime-dashboard
 ```
 
 **2. Pakete installieren:**
 ```bash
-pip install streamlit duckdb pandas plotly folium streamlit-folium
+pip install -r requirements.txt
 ```
 
-**3. Datensatz herunterladen:**  
-[SPD Crime Data von data.seattle.gov](https://data.seattle.gov/Public-Safety/SPD-Crime-Data-2008-Present/tazs-3rd5) als CSV herunterladen und in den Projektordner legen.
-
-**4. Datenbank aufbauen:**
+**3. Datenbank aufbauen:**
 ```bash
 python crime_db.py
 ```
+Lädt automatisch die historischen Daten (aus der im Repo enthaltenen `crimes_historical.parquet`) sowie alle aktuellen Fälle seit 2024 von der Seattle Open Data API – ein manueller CSV-Download ist nicht nötig.
 
-**5. Dashboard starten:**
+**4. Dashboard starten:**
 ```bash
-streamlit run sc_dashboard_neu.py
+streamlit run "sc_dashboard neu.py"
 ```
+
+---
+
+## Deployment & automatische Aktualisierung
+
+Die App läuft öffentlich auf [Streamlit Community Cloud](https://crime-dashboard-eiyustjjxtgdrhvnruzwsb.streamlit.app). Da die fertige Datenbank (~250 MB) das GitHub-Dateilimit sprengt und ohnehin per `.gitignore` ausgeschlossen ist, funktioniert die Aktualisierung so:
+
+1. Ein täglicher **GitHub-Actions-Workflow** (`.github/workflows/update-db.yml`, 06:00 UTC) baut `seattle_crime.db` neu auf – historische Parquet-Daten plus aktuelle Fälle von der Seattle-API – und lädt sie als [GitHub-Release-Asset](https://github.com/bfelix91/crime-dashboard/releases/tag/db-v1) hoch.
+2. Die Dashboard-App prüft beim (Neu-)Start, ob eine neuere Version vorliegt (per `Last-Modified`-Header, Cache-Intervall 24h), und lädt sie bei Bedarf automatisch herunter.
+
+Damit bleibt das öffentliche Dashboard laufend aktuell, ohne dass manuell etwas nachgepflegt werden muss.
 
 ---
 
@@ -179,7 +195,7 @@ Zeitreihen-Chart mit einer Linie pro Jahr, Datenpunkten mit Werten direkt auf de
 
 - **REDACTED-Koordinaten:** ~15% der Daten haben keine GPS-Koordinaten (Datenschutz)
 - **Systemwechsel 2019:** RMS → NIBRS kann Brüche in Zeitreihen verursachen
-- **Keine Echtzeit-Updates:** Manueller CSV-Download notwendig
+- **Kein Echtzeit-Update:** Die Datenbank wird nur einmal täglich aktualisiert (GitHub-Actions-Cron), nicht live bei jedem neuen Fall
 - **GeoJSON:** Offizielle Seattle Precinct-Grenzen waren nicht über die öffentliche API abrufbar
 
 ---

@@ -25,7 +25,22 @@
       "WebFetch(domain:github.com)",
       "WebFetch(domain:boundaries-api.seattle.io)",
       "WebFetch(domain:www.arcgis.com)",
-      "WebFetch(domain:www.seattle.gov)"
+      "WebFetch(domain:www.seattle.gov)",
+      "Bash(grep -n \"CSV einlesen\" -A1 \"/Users/felix/Downloads/architektur_html_final.html\" | head -5)",
+      "Read(//Users/felix/Downloads/**)",
+      "Bash(grep -n \"Hauptdateien\\\\|zusammenspielen\\\\|Klicke auf einen Block\" \"/Users/felix/Downloads/architektur_html_final.html\")",
+      "Bash(python3 -c ' *)",
+      "Bash(osascript -l JavaScript test.js)",
+      "Bash(python3 -c \"import docx; print\\(docx.__file__\\)\")",
+      "Bash(pip3 show *)",
+      "Bash(unzip -oq \"/Users/felix/Downloads/sprechtext_architektur.docx\")",
+      "Bash(python3 -m pip install --quiet python-docx)",
+      "Bash(python3)",
+      "Bash(which soffice *)",
+      "Read(//Applications/**)",
+      "Bash(textutil -help)",
+      "Read(//private/tmp/**)",
+      "Bash(python3 \"/private/tmp/claude-501/-Users-felix-Documents-Felix-Studium-4--Semester-Projekt-Crime-Dashboard/55ad4670-da36-4523-8d33-740002e93704/scratchpad/edit_sprechtext.py\")"
     ]
   }
 }
