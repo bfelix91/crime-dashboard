@@ -234,6 +234,7 @@ Dokumentation:
 
 Konzeptionelle Unterstützung:
 - Diskussion der Datenbankwahl (DuckDB vs. Alternativen)
+- Öffentlicher Zugang zu Streamlit
 - Strategieberatung beim Deployment (Hybrid-Ansatz Parquet + API)
 
 ---
