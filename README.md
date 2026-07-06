@@ -200,11 +200,13 @@ Zeitreihen-Chart mit einer Linie pro Jahr, Datenpunkten mit Werten direkt auf de
 - **Kein Echtzeit-Update:** Die Datenbank wird nur einmal täglich aktualisiert (GitHub-Actions-Cron), nicht live bei jedem neuen Fall
 - **GeoJSON:** Offizielle Seattle Precinct-Grenzen waren nicht über die öffentliche API abrufbar
 
+<!--
 ---
 
 ## Dokumentation
 
 Eine ausführliche Dokumentation aller Schritte (Datenaufbereitung, Architektur, Visualisierungen, kritische Reflexion) ist im [Quarto Handout](handout.qmd) verfügbar.
+-->
 
 ---
 
@@ -215,6 +217,25 @@ Eine ausführliche Dokumentation aller Schritte (Datenaufbereitung, Architektur,
 - [NIBRS Dokumentation](https://ucr.fbi.gov/nibrs/2019/resource-pages/nibrs_techspec-2019_f.pdf)
 - [DuckDB Dokumentation](https://duckdb.org/docs)
 - [Streamlit Dokumentation](https://docs.streamlit.io)
+- [Claude (Anthropic)](https://claude.ai) – KI-Assistent für Code-Unterstützung und Dokumentation
+
+
+KI-Unterstützung
+Im Rahmen dieses Projekts wurde Claude (Anthropic) als KI-Assistent eingesetzt. Der Einsatz erfolgte gezielt für folgende Bereiche:
+Code-Unterstützung:
+
+Debugging von Fehlermeldungen (z.B. DuckDB-Verbindungsprobleme, Streamlit Cache-Fehler)
+Vorschläge für CSS-Styling des Dashboards
+Hilfe bei der Folium/Plotly Konfiguration
+
+Dokumentation:
+
+Unterstützung bei der Erstellung des interaktiven Architektur-Diagramms sowie der README
+
+Konzeptionelle Unterstützung:
+
+Diskussion der Datenbankwahl (DuckDB vs. Alternativen)
+Strategieberatung beim Deployment (Hybrid-Ansatz Parquet + API)
 
 ---
 
