@@ -237,6 +237,4 @@ Konzeptionelle Unterstützung:
 - Öffentlicher Zugang zu Streamlit
 - Strategieberatung beim Deployment (Hybrid-Ansatz Parquet + API)
 
----
 
-*Erstellt im Rahmen des Moduls „Datenaufbereitung und Visualisierung" an der THWS*
